@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRUSS · Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #080810;
+      --panel:        #0f0f1e;
+      --border:       rgba(255,255,255,0.07);
+      --text:         #f1f5f9;
+      --muted:        #475569;
+      --dim:          #1e293b;
+      --green:        #22c55e;
+      --green-lt:     #86efac;
+      --yellow:       #eab308;
+      --yellow-lt:    #fde047;
+      --red:          #ef4444;
+      --red-lt:       #fca5a5;
+      --purple:       #7c3aed;
+      --purple-lt:    #c4b5fd;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'SF Mono', 'Fira Mono', 'JetBrains Mono', ui-monospace, monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 28px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(8,8,18,0.98);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .header-account {
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      color: var(--purple);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .header-date {
+      font-size: 0.6rem;
+      color: var(--muted);
+      margin-top: 3px;
+      letter-spacing: 0.04em;
+    }
+    .clock {
+      font-size: 2.4rem;
+      font-weight: 200;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ── MAIN GRID ── */
+    .main {
+      display: grid;
+      grid-template-columns: 55% 45%;
+      flex: 1;
+    }
+
+    /* ── PANELS ── */
+    .panel {
+      padding: 28px 32px;
+      border-right: 1px solid var(--border);
+    }
+    .panel:last-child { border-right: none; }
+
+    .panel-label {
+      font-size: 0.52rem;
+      letter-spacing: 0.22em;
+      color: var(--purple);
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    /* ── BALANCE ── */
+    .balance-num {
+      font-size: clamp(3.2rem, 7vw, 5.8rem);
+      font-weight: 200;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      transition: color 0.4s;
+    }
+    .bal-green  { color: var(--green-lt); }
+    .bal-yellow { color: var(--yellow-lt); }
+    .bal-red    { color: var(--red-lt); }
+    .bal-dim    { color: var(--muted); }
+
+    .status-badge {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .bdg-green  { background: rgba(34,197,94,0.14);  color: var(--green); }
+    .bdg-yellow { background: rgba(234,179,8,0.14);  color: var(--yellow); }
+    .bdg-red    { background: rgba(239,68,68,0.14);  color: var(--red); }
+
+    .balance-sub {
+      font-size: 0.58rem;
+      color: var(--muted);
+      margin-top: 7px;
+      letter-spacing: 0.08em;
+    }
+
+    /* ── SEED INPUT ── */
+    .seed-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 18px;
+      align-items: center;
+    }
+    .seed-row input {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      padding: 7px 10px;
+      color: var(--text);
+      font-size: 0.8rem;
+      font-family: inherit;
+      outline: none;
+      width: 160px;
+    }
+    .seed-row input:focus { border-color: var(--purple); }
+    .seed-row button {
+      background: var(--purple);
+      border: none;
+      border-radius: 6px;
+      padding: 7px 14px;
+      color: #fff;
+      font-size: 0.72rem;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 22px 0;
+    }
+
+    /* ── UPCOMING DAYS ── */
+    .upcoming-label {
+      font-size: 0.52rem;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .day-block { margin-bottom: 18px; }
+
+    .day-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 7px;
+    }
+    .day-name {
+      font-size: 0.75rem;
+      color: var(--purple-lt);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .day-bal {
+      font-size: 1.15rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+    }
+
+    .txn-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.73rem;
+      padding: 2px 0;
+      color: var(--muted);
+    }
+    .txn-row span:last-child { font-variant-numeric: tabular-nums; }
+    .pos    { color: var(--green-lt); }
+    .neg    { color: var(--red-lt); }
+    .allow  { color: var(--purple-lt); }
+    .ghost  { color: #2d3748; }
+
+    /* ── WEATHER ── */
+    .weather-now {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 8px;
+    }
+    .wx-icon {
+      font-size: 4.5rem;
+      line-height: 1;
+    }
+    .wx-temp {
+      font-size: clamp(3rem, 7vw, 5rem);
+      font-weight: 200;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .wx-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-top: 8px;
+      letter-spacing: 0.03em;
+    }
+    .wx-detail {
+      font-size: 0.65rem;
+      color: var(--dim);
+      margin-top: 5px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── FORECAST STRIP ── */
+    .fc-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .fc-day {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 6px;
+      text-align: center;
+    }
+    .fc-dayname {
+      font-size: 0.56rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .fc-icon { font-size: 1.6rem; margin-bottom: 5px; }
+    .fc-hi {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .fc-lo {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      margin-top: 1px;
+    }
+    .fc-precip {
+      font-size: 0.58rem;
+      color: #60a5fa;
+      margin-top: 5px;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 10px 28px;
+      font-size: 0.5rem;
+      color: var(--dim);
+      letter-spacing: 0.1em;
+      display: flex;
+      justify-content: space-between;
+      text-transform: uppercase;
+    }
+
+    .loading { color: var(--muted); font-size: 0.82rem; }
+    .err     { color: var(--red-lt); font-size: 0.75rem; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 720px) {
+      .main { grid-template-columns: 1fr; }
+      .panel { border-right: none; border-bottom: 1px solid var(--border); }
+      .clock { font-size: 1.7rem; }
+      .balance-num { font-size: clamp(2.6rem, 12vw, 4rem); }
+      .wx-temp { font-size: clamp(2.4rem, 12vw, 4rem); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="header-account">BRUSS &middot; NW PREFERRED S0055</div>
+    <div class="header-date" id="header-date"></div>
+  </div>
+  <div class="clock" id="clock"></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ══ FINANCIAL PULSE ══ -->
+  <div class="panel">
+    <div class="panel-label">Financial Pulse</div>
+
+    <div class="balance-num bal-dim" id="balance-num">—</div>
+    <div id="status-badge"></div>
+    <div class="balance-sub">PREDICTED CHECKING BALANCE &middot; S0055</div>
+
+    <div class="seed-row">
+      <input id="seed-input" type="number" placeholder="Enter current balance…" onkeydown="if(event.key==='Enter')setSeed()">
+      <button onclick="setSeed()">Set</button>
+    </div>
+
+    <hr class="divider">
+
+    <div class="upcoming-label">Next 3 Days</div>
+    <div id="upcoming-days"><div class="loading">Building forecast…</div></div>
+  </div>
+
+  <!-- ══ WEATHER ══ -->
+  <div class="panel">
+    <div class="panel-label">Portland, OR &middot; Weather</div>
+
+    <div id="weather-now"><div class="loading">Fetching weather…</div></div>
+
+    <hr class="divider">
+
+    <div id="fc-strip"><div class="loading">Loading forecast…</div></div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <span>BRUSS HOUSEHOLD DASHBOARD &middot; v1.0</span>
+  <span id="last-wx-refresh"></span>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// FINANCIAL CONSTANTS  (from bruss_daily_forecast.jsx)
+// ═══════════════════════════════════════════════════════
+
+const JEFF_PAYCHECK      = 2728.45;
+const BETHANY_PAYCHECK   = 3259.00;
+const EPBB_STIPEND       = 100.00;
+const WEEKLY_JEFF        = 275.00;
+const WEEKLY_BETHANY     = 210.00;
+
+const NW_NATURAL_BY_MONTH    = [320, 280, 250, 200, 150, 107, 107, 107, 137, 137, 200, 280];
+const PACIFIC_POWER_BY_MONTH = [360, 382, 372, 303, 311, 318, 282, 433, 438, 381, 324, 373];
+const ADU_BY_MONTH           = [300, 300, 300,2000,2000,2000,2000,2000,2000,2000,2000, 300];
+
+const MONTHLY_BILLS = [
+  { name:"Patreon",          amount:54.00,    day:1  },
+  { name:"Mission Lane",     amount:525.00,   day:4  },
+  { name:"Capital One",      amount:125.00,   day:5  },
+  { name:"T-Mobile",         amount:182.08,   day:6  },
+  { name:"Comcast ADU",      amount:104.00,   day:8  },
+  { name:"Amazon Prime",     amount:2.99,     day:9  },
+  { name:"Audible",          amount:14.95,    day:15 },
+  { name:"Pacific Power",    amount:null,     day:15, seasonal:"pacificpower" },
+  { name:"Cincinnati Ins.",  amount:440.00,   day:16 },
+  { name:"Mazda",            amount:519.00,   day:17 },
+  { name:"Mortgage",         amount:7006.33,  day:18 },
+  { name:"IRS",              amount:1000.00,  day:19 },
+  { name:"Disney+",          amount:15.99,    day:19 },
+  { name:"Comcast Main",     amount:115.00,   day:21 },
+  { name:"Healthy Paws",     amount:398.08,   day:23 },
+  { name:"NW Natural",       amount:null,     day:27, seasonal:"nwnatural" },
+  { name:"Student Loan",     amount:190.65,   day:28 },
+  { name:"Kia",              amount:563.86,   day:29 },
+  { name:"Arrowhead Ins.",   amount:43.00,    day:29 },
+  { name:"Home Depot",       amount:29.00,    day:29 },
+  { name:"Target Card",      amount:30.00,    day:30 },
+  { name:"Netflix",          amount:24.99,    day:30 },
+];
+
+const PERIODIC_BILLS = [
+  { name:"Portland Disposal", amount:195.40, day:2,  months:[1,3,5,7,9,11] },
+  { name:"Portland Water",    amount:580.00, day:25, months:[1,4,7,10]      },
+  { name:"RO Health",         amount:165.00, day:28, months:[2,5,8,11]      },
+];
+
+// ═══════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════
+
+function lastBizDay(year, month) {
+  const d = new Date(year, month + 1, 0);
+  while (d.getDay() === 0 || d.getDay() === 6) d.setDate(d.getDate() - 1);
+  return d.getDate();
+}
+
+function isPayday(date) {
+  const dom = date.getDate();
+  const lbd = lastBizDay(date.getFullYear(), date.getMonth());
+  return dom === 15 || dom === lbd;
+}
+
+function isFriday(d) { return d.getDay() === 5; }
+
+function dateKey(d) {
+  return d.getFullYear() + '-' +
+    String(d.getMonth()+1).padStart(2,'0') + '-' +
+    String(d.getDate()).padStart(2,'0');
+}
+
+function fmt(n) {
+  if (n == null) return '—';
+  const abs = Math.abs(n);
+  const s = abs.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return (n < 0 ? '-$' : '$') + s;
+}
+
+function fmtShort(n) {
+  if (n == null) return '—';
+  const abs = Math.abs(n);
+  const sign = n < 0 ? '-$' : '$';
+  if (abs >= 10000) return sign + (abs/1000).toFixed(0) + 'k';
+  if (abs >= 1000)  return sign + (abs/1000).toFixed(1) + 'k';
+  return sign + abs.toFixed(0);
+}
+
+// ═══════════════════════════════════════════════════════
+// FORECAST ENGINE
+// ═══════════════════════════════════════════════════════
+
+function buildForecast(startBal) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const map = {};
+  let balance = startBal;
+  const end = new Date(today.getFullYear(), today.getMonth() + 3, 0);
+
+  for (let d = new Date(today); d <= end; d.setDate(d.getDate()+1)) {
+    const date = new Date(d);
+    const m   = date.getMonth();
+    const dom = date.getDate();
+    const txns = [];
+
+    // Income
+    if (isPayday(date)) {
+      txns.push({ name:"Jeff Paycheck",    amount: JEFF_PAYCHECK,    type:"income" });
+      txns.push({ name:"Bethany Paycheck", amount: BETHANY_PAYCHECK, type:"income" });
+    }
+    if (dom === 5)
+      txns.push({ name:"EPBB Stipend", amount: EPBB_STIPEND, type:"income" });
+    if (dom === 1 && ADU_BY_MONTH[m] > 0)
+      txns.push({ name:"ADU Income", amount: ADU_BY_MONTH[m], type:"income" });
+
+    // Allowances (weekly Fridays)
+    if (isFriday(date)) {
+      txns.push({ name:"Jeff Allowance",    amount: -WEEKLY_JEFF,    type:"allowance" });
+      txns.push({ name:"Bethany Allowance", amount: -WEEKLY_BETHANY, type:"allowance" });
+    }
+
+    // Monthly bills
+    for (const b of MONTHLY_BILLS) {
+      const lastDom = new Date(date.getFullYear(), m+1, 0).getDate();
+      const billDay = Math.min(b.day, lastDom);
+      if (dom === billDay) {
+        let amt = b.amount;
+        if (b.seasonal === 'nwnatural')    amt = NW_NATURAL_BY_MONTH[m];
+        if (b.seasonal === 'pacificpower') amt = PACIFIC_POWER_BY_MONTH[m];
+        txns.push({ name: b.name, amount: -amt, type:"expense" });
+      }
+    }
+
+    // Periodic bills
+    for (const b of PERIODIC_BILLS) {
+      if (b.months.includes(m) && dom === b.day)
+        txns.push({ name: b.name, amount: -b.amount, type:"expense" });
+    }
+
+    balance += txns.reduce((s,t) => s + t.amount, 0);
+    map[dateKey(date)] = { balance, txns };
+  }
+
+  return map;
+}
+
+// ═══════════════════════════════════════════════════════
+// FINANCIAL RENDER
+// ═══════════════════════════════════════════════════════
+
+function balClass(n) {
+  if (n >= 1000) return 'bal-green';
+  if (n >= 500)  return 'bal-yellow';
+  return 'bal-red';
+}
+function balHex(n) {
+  if (n >= 1000) return '#86efac';
+  if (n >= 500)  return '#fde047';
+  return '#fca5a5';
+}
+function badgeHtml(n) {
+  if (n >= 1000) return '<span class="status-badge bdg-green">ON TRACK</span>';
+  if (n >= 500)  return '<span class="status-badge bdg-yellow">LOW BUFFER</span>';
+  return '<span class="status-badge bdg-red">DANGER</span>';
+}
+
+function renderFinancial() {
+  const seed = parseFloat(localStorage.getItem('bruss:seed') || '3000');
+  const fc   = buildForecast(seed);
+
+  const today = new Date(); today.setHours(0,0,0,0);
+  const todayDk = dateKey(today);
+  const todayData = fc[todayDk];
+  const bal = todayData ? todayData.balance : null;
+
+  // Big number
+  const numEl = document.getElementById('balance-num');
+  numEl.className = 'balance-num ' + (bal !== null ? balClass(bal) : 'bal-dim');
+  numEl.textContent = bal !== null ? fmt(bal) : '—';
+
+  // Badge
+  document.getElementById('status-badge').innerHTML =
+    bal !== null ? badgeHtml(bal) : '';
+
+  // Seed placeholder
+  const si = document.getElementById('seed-input');
+  if (!si.value) si.placeholder = 'Seed: ' + fmt(seed) + ' — update?';
+
+  // Next 3 days
+  const upEl = document.getElementById('upcoming-days');
+  let html = '';
+  for (let i = 1; i <= 3; i++) {
+    const d = new Date(today);
+    d.setDate(d.getDate() + i);
+    const dk = dateKey(d);
+    const data = fc[dk];
+    if (!data) continue;
+
+    const dayLabel = d.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
+    const color    = balHex(data.balance);
+
+    let txnRows = '';
+    const show = data.txns.slice(0, 5);
+    for (const t of show) {
+      const cls = t.amount >= 0 ? 'pos' : (t.type === 'allowance' ? 'allow' : 'neg');
+      txnRows += `<div class="txn-row">
+        <span>${t.name}</span>
+        <span class="${cls}">${t.amount >= 0 ? '+' : ''}${fmt(t.amount)}</span>
+      </div>`;
+    }
+    if (data.txns.length > 5)
+      txnRows += `<div class="txn-row ghost"><span>+ ${data.txns.length-5} more</span></div>`;
+    if (!data.txns.length)
+      txnRows = '<div class="txn-row ghost"><span>No scheduled transactions</span></div>';
+
+    html += `<div class="day-block">
+      <div class="day-header">
+        <span class="day-name">${dayLabel}</span>
+        <span class="day-bal" style="color:${color}">${fmtShort(data.balance)}</span>
+      </div>
+      ${txnRows}
+    </div>`;
+  }
+  upEl.innerHTML = html || '<div class="ghost">No data</div>';
+}
+
+function setSeed() {
+  const val = parseFloat(document.getElementById('seed-input').value);
+  if (!isNaN(val)) {
+    localStorage.setItem('bruss:seed', val);
+    document.getElementById('seed-input').value = '';
+    renderFinancial();
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// WEATHER  (Open-Meteo — no API key required)
+// ═══════════════════════════════════════════════════════
+
+const WX_ICON = {
+  0:'☀️', 1:'🌤️', 2:'⛅', 3:'☁️',
+  45:'🌫️', 48:'🌫️',
+  51:'🌦️', 53:'🌦️', 55:'🌧️',
+  61:'🌧️', 63:'🌧️', 65:'🌧️',
+  71:'❄️',  73:'❄️',  75:'❄️', 77:'🌨️',
+  80:'🌦️', 81:'🌧️', 82:'⛈️',
+  85:'🌨️', 86:'❄️',
+  95:'⛈️', 96:'⛈️', 99:'⛈️',
+};
+
+const WX_DESC = {
+  0:'Clear', 1:'Mostly Clear', 2:'Partly Cloudy', 3:'Overcast',
+  45:'Fog', 48:'Icy Fog',
+  51:'Light Drizzle', 53:'Drizzle', 55:'Heavy Drizzle',
+  61:'Light Rain', 63:'Rain', 65:'Heavy Rain',
+  71:'Light Snow', 73:'Snow', 75:'Heavy Snow', 77:'Snow Grains',
+  80:'Showers', 81:'Rain Showers', 82:'Heavy Showers',
+  85:'Snow Showers', 86:'Heavy Snow Showers',
+  95:'Thunderstorm', 96:'Thunderstorm + Hail', 99:'Severe Thunderstorm',
+};
+
+const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+async function fetchWeather() {
+  const url =
+    'https://api.open-meteo.com/v1/forecast' +
+    '?latitude=45.5051&longitude=-122.6750' +
+    '&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m' +
+    '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max' +
+    '&temperature_unit=fahrenheit&wind_speed_unit=mph' +
+    '&timezone=America%2FLos_Angeles&forecast_days=4';
+  try {
+    const res  = await fetch(url);
+    const data = await res.json();
+    renderWeather(data);
+  } catch (e) {
+    document.getElementById('weather-now').innerHTML =
+      '<div class="err">Weather unavailable — check connection</div>';
+    document.getElementById('fc-strip').innerHTML = '';
+  }
+}
+
+function renderWeather(data) {
+  const cur  = data.current;
+  const code = cur.weather_code;
+  const icon = WX_ICON[code] || '🌡️';
+  const desc = WX_DESC[code] || 'Unknown';
+  const temp = Math.round(cur.temperature_2m);
+  const wind = Math.round(cur.wind_speed_10m);
+  const hum  = cur.relative_humidity_2m;
+
+  document.getElementById('weather-now').innerHTML = `
+    <div class="weather-now">
+      <div class="wx-icon">${icon}</div>
+      <div>
+        <div class="wx-temp">${temp}°<span style="font-size:1.5rem;color:var(--muted)">F</span></div>
+        <div class="wx-desc">${desc}</div>
+        <div class="wx-detail">Wind ${wind} mph &nbsp;·&nbsp; Humidity ${hum}%</div>
+      </div>
+    </div>`;
+
+  const daily = data.daily;
+  let strip = '<div class="fc-strip">';
+  for (let i = 0; i < 4; i++) {
+    const d       = new Date(daily.time[i] + 'T12:00:00');
+    const label   = i === 0 ? 'Today' : DOW[d.getDay()];
+    const fc_icon = WX_ICON[daily.weather_code[i]] || '🌡️';
+    const hi      = Math.round(daily.temperature_2m_max[i]);
+    const lo      = Math.round(daily.temperature_2m_min[i]);
+    const precip  = daily.precipitation_probability_max[i];
+    strip += `<div class="fc-day">
+      <div class="fc-dayname">${label}</div>
+      <div class="fc-icon">${fc_icon}</div>
+      <div class="fc-hi">${hi}°</div>
+      <div class="fc-lo">${lo}°</div>
+      ${precip > 10 ? `<div class="fc-precip">💧 ${precip}%</div>` : ''}
+    </div>`;
+  }
+  strip += '</div>';
+  document.getElementById('fc-strip').innerHTML = strip;
+
+  document.getElementById('last-wx-refresh').textContent =
+    'WEATHER UPDATED ' + new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+}
+
+// ═══════════════════════════════════════════════════════
+// CLOCK
+// ═══════════════════════════════════════════════════════
+
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true});
+  document.getElementById('header-date').textContent =
+    now.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric', year:'numeric'});
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+
+updateClock();
+setInterval(updateClock, 1000);
+
+renderFinancial();
+setInterval(renderFinancial, 60 * 1000);      // refresh every minute
+
+fetchWeather();
+setInterval(fetchWeather, 10 * 60 * 1000);    // refresh every 10 min
+</script>
+</body>
+</html>
