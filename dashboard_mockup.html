@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BRUSS Dashboard — Mockup</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #ffffff; --text: #1a1a1a; --muted: #6b7280; --border: #e5e7eb;
+  --accent: #4f46e5; --green: #16a34a; --yellow: #ca8a04; --red: #dc2626;
+  --shadow: 0 1px 2px rgba(0,0,0,0.06);
+  --card: #ffffff; --card-border: #f0f0f0;
+}
+.dark { 
+  --bg: #0f0f1a; --text: #f1f5f9; --muted: #64748b; --border: #1e293b;
+  --accent: #818cf8; --card: #161625; --card-border: #1e293b;
+  --shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+body { font-family: 'Inter','Helvetica Neue',Arial,sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; transition: background 0.3s, color 0.3s; }
+
+.header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid var(--border); }
+.header-left h1 { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); text-shadow: 0 1px 1px rgba(0,0,0,0.04); }
+.header-left p { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+.clock { font-size: 1.8rem; font-weight: 300; letter-spacing: -0.02em; color: var(--text); text-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+.toggle-btn { background: var(--border); border: none; border-radius: 20px; padding: 6px 14px; font-size: 0.68rem; color: var(--muted); cursor: pointer; font-family: inherit; }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px 24px; }
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+.card { background: var(--card); border: 1px solid var(--card-border); border-radius: 12px; padding: 20px; box-shadow: var(--shadow); }
+.card-title { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+
+/* Financial Pulse */
+.balance { font-size: 3.2rem; font-weight: 700; letter-spacing: -0.03em; color: var(--text); text-shadow: 0 1px 2px rgba(0,0,0,0.06); line-height: 1.1; }
+.badge { display: inline-block; font-size: 0.6rem; font-weight: 800; letter-spacing: 0.1em; padding: 3px 10px; border-radius: 4px; margin-top: 8px; }
+.badge-green { background: #dcfce7; color: #16a34a; }
+.badge-yellow { background: #fef9c3; color: #a16207; }
+.dark .badge-green { background: rgba(22,163,74,0.15); }
+.dark .badge-yellow { background: rgba(202,138,4,0.15); }
+.upcoming { margin-top: 16px; }
+.upcoming-day { padding: 10px 0; border-bottom: 1px solid var(--border); }
+.upcoming-day:last-child { border-bottom: none; }
+.day-header { display: flex; justify-content: space-between; align-items: baseline; }
+.day-label { font-size: 0.82rem; font-weight: 700; }
+.day-bal { font-size: 0.82rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.day-txn { font-size: 0.72rem; color: var(--muted); margin-top: 2px; display: flex; justify-content: space-between; }
+.txn-amt-neg { color: var(--red); font-weight: 600; }
+.txn-amt-pos { color: var(--green); font-weight: 600; }
+
+/* Weather */
+.weather-current { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+.weather-temp { font-size: 3rem; font-weight: 300; letter-spacing: -0.03em; text-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+.weather-desc { font-size: 0.85rem; color: var(--muted); }
+.forecast-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+.forecast-day { text-align: center; padding: 10px 6px; border: 1px solid var(--border); border-radius: 8px; }
+.forecast-day .label { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.forecast-day .temp { font-size: 1.1rem; font-weight: 600; margin: 4px 0; }
+.forecast-day .lo { font-size: 0.68rem; color: var(--muted); }
+
+/* Calendar */
+.cal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.cal-nav button { background: none; border: 1px solid var(--border); border-radius: 6px; padding: 4px 12px; cursor: pointer; color: var(--text); font-family: inherit; font-size: 0.9rem; }
+.cal-nav .month-label { font-size: 0.95rem; font-weight: 700; }
+.cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; }
+.cal-dow { text-align: center; font-size: 0.55rem; font-weight: 700; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 0; }
+.cal-cell { min-height: 64px; border: 1px solid var(--card-border); border-radius: 6px; padding: 3px 5px; font-size: 0.68rem; position: relative; overflow: hidden; }
+.cal-cell.other-month { opacity: 0.35; }
+.cal-cell.today { border-color: var(--accent); border-width: 2px; }
+.cal-cell .dom { font-weight: 700; font-size: 0.62rem; margin-bottom: 2px; }
+.cal-event { font-size: 0.5rem; padding: 1px 3px; border-radius: 3px; margin-bottom: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; color: #fff; }
+.ev-jeff { background: #3b82f6; }
+.ev-bethany { background: #a855f7; }
+.ev-airbnb { background: #f97316; }
+.ev-bill { background: #ef4444; opacity: 0.7; }
+.cal-legend { display: flex; gap: 14px; margin-top: 8px; flex-wrap: wrap; }
+.cal-legend span { font-size: 0.58rem; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+.cal-legend i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+
+/* Shopping List */
+.list-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+.list-item:last-child { border-bottom: none; }
+.list-check { width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--border); cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.list-check.done { background: var(--green); border-color: var(--green); }
+.list-check.done::after { content: "✓"; color: #fff; font-size: 0.7rem; font-weight: 900; }
+.list-text.done { text-decoration: line-through; color: var(--muted); }
+.list-add { margin-top: 10px; display: flex; gap: 8px; }
+.list-add input { flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; font-size: 0.8rem; color: var(--text); outline: none; font-family: inherit; }
+.list-add button { background: var(--accent); color: #fff; border: none; border-radius: 6px; padding: 8px 14px; font-weight: 700; cursor: pointer; font-size: 0.75rem; font-family: inherit; }
+
+.footer { text-align: center; padding: 16px; font-size: 0.55rem; color: var(--muted); letter-spacing: 0.08em; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>BRUSS · NW Preferred S0055</h1>
+    <p>Saturday, February 21, 2026</p>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <button class="toggle-btn" onclick="document.body.classList.toggle('dark')">☀ / ☾</button>
+    <div class="clock" id="clock">06:42 PM</div>
+  </div>
+</div>
+
+<div class="grid">
+
+  <!-- FINANCIAL PULSE -->
+  <div class="card">
+    <div class="card-title">Financial Pulse</div>
+    <div class="balance">$2,885</div>
+    <div class="badge badge-green">ON TRACK</div>
+    <div style="font-size:0.68rem;color:var(--muted);margin-top:6px;">Predicted checking balance · S0055</div>
+    <div class="upcoming">
+      <div class="upcoming-day">
+        <div class="day-header"><span class="day-label">Sun, Feb 22</span><span class="day-bal" style="color:var(--green)">$2,885</span></div>
+        <div class="day-txn"><span>No scheduled transactions</span></div>
+      </div>
+      <div class="upcoming-day">
+        <div class="day-header"><span class="day-label">Mon, Feb 23</span><span class="day-bal" style="color:var(--green)">$2,487</span></div>
+        <div class="day-txn"><span>Healthy Paws</span><span class="txn-amt-neg">−$398.08</span></div>
+      </div>
+      <div class="upcoming-day">
+        <div class="day-header"><span class="day-label">Tue, Feb 24</span><span class="day-bal" style="color:var(--green)">$2,487</span></div>
+        <div class="day-txn"><span>No scheduled transactions</span></div>
+      </div>
+      <div class="upcoming-day">
+        <div class="day-header"><span class="day-label">Wed, Feb 25</span><span class="day-bal" style="color:var(--green)">$1,907</span></div>
+        <div class="day-txn"><span>Portland Water</span><span class="txn-amt-neg">−$580.00</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEATHER -->
+  <div class="card">
+    <div class="card-title">Portland, OR · Weather</div>
+    <div class="weather-current">
+      <div class="weather-temp">41°</div>
+      <div><div style="font-size:1rem;">☁️</div><div class="weather-desc">Overcast · Wind 8 mph · Humidity 75%</div></div>
+    </div>
+    <div class="forecast-row">
+      <div class="forecast-day"><div class="label">Today</div><div class="temp">44°</div><div class="lo">38° · 🌧 91%</div></div>
+      <div class="forecast-day"><div class="label">Sun</div><div class="temp">53°</div><div class="lo">41° · 🌧 74%</div></div>
+      <div class="forecast-day"><div class="label">Mon</div><div class="temp">48°</div><div class="lo">41° · 🌧 94%</div></div>
+      <div class="forecast-day"><div class="label">Tue</div><div class="temp">51°</div><div class="lo">41° · 🌧 82%</div></div>
+    </div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div class="card" style="grid-column: 1 / -1;">
+    <div class="card-title">Calendar</div>
+    <div class="cal-nav">
+      <button>‹</button>
+      <span class="month-label">February 2026</span>
+      <button>›</button>
+    </div>
+    <div class="cal-grid">
+      <div class="cal-dow">Sun</div><div class="cal-dow">Mon</div><div class="cal-dow">Tue</div><div class="cal-dow">Wed</div><div class="cal-dow">Thu</div><div class="cal-dow">Fri</div><div class="cal-dow">Sat</div>
+
+      <!-- Week 1: Jan 25-31 -->
+      <div class="cal-cell other-month"><div class="dom">25</div></div>
+      <div class="cal-cell other-month"><div class="dom">26</div></div>
+      <div class="cal-cell other-month"><div class="dom">27</div></div>
+      <div class="cal-cell other-month"><div class="dom">28</div></div>
+      <div class="cal-cell other-month"><div class="dom">29</div></div>
+      <div class="cal-cell other-month"><div class="dom">30</div></div>
+      <div class="cal-cell other-month"><div class="dom">31</div></div>
+
+      <!-- Week 2: Feb 1-7 -->
+      <div class="cal-cell"><div class="dom">1</div><span class="cal-event ev-bill">Patreon $54</span><span class="cal-event ev-airbnb">Guest: Sarah M.</span></div>
+      <div class="cal-cell"><div class="dom">2</div><span class="cal-event ev-airbnb">↳ checkout</span></div>
+      <div class="cal-cell"><div class="dom">3</div></div>
+      <div class="cal-cell"><div class="dom">4</div><span class="cal-event ev-bill">Mission Lane</span></div>
+      <div class="cal-cell"><div class="dom">5</div><span class="cal-event ev-jeff">Dentist 2pm</span></div>
+      <div class="cal-cell"><div class="dom">6</div><span class="cal-event ev-bill">T-Mobile</span></div>
+      <div class="cal-cell"><div class="dom">7</div></div>
+
+      <!-- Week 3: Feb 8-14 -->
+      <div class="cal-cell"><div class="dom">8</div><span class="cal-event ev-bill">Comcast ADU</span></div>
+      <div class="cal-cell"><div class="dom">9</div></div>
+      <div class="cal-cell"><div class="dom">10</div><span class="cal-event ev-bethany">Team offsite</span></div>
+      <div class="cal-cell"><div class="dom">11</div><span class="cal-event ev-bethany">Team offsite</span></div>
+      <div class="cal-cell"><div class="dom">12</div><span class="cal-event ev-airbnb">Guest: Mike R.</span></div>
+      <div class="cal-cell"><div class="dom">13</div><span class="cal-event ev-jeff">Jeff bday 🎂</span></div>
+      <div class="cal-cell"><div class="dom">14</div><span class="cal-event ev-jeff">Valentine's</span></div>
+
+      <!-- Week 4: Feb 15-21 -->
+      <div class="cal-cell"><div class="dom">15</div><span class="cal-event ev-bill">Payday 💰</span><span class="cal-event ev-airbnb">↳ checkout</span></div>
+      <div class="cal-cell"><div class="dom">16</div><span class="cal-event ev-bill">Cinci Ins $440</span></div>
+      <div class="cal-cell"><div class="dom">17</div><span class="cal-event ev-bill">Mazda $519</span></div>
+      <div class="cal-cell"><div class="dom">18</div><span class="cal-event ev-bill">Mortgage</span></div>
+      <div class="cal-cell"><div class="dom">19</div><span class="cal-event ev-bill">IRS $1,000</span></div>
+      <div class="cal-cell"><div class="dom">20</div><span class="cal-event ev-airbnb">Guest: Tina L.</span></div>
+      <div class="cal-cell today"><div class="dom">21</div><span class="cal-event ev-jeff">Dashboard day!</span></div>
+
+      <!-- Week 5: Feb 22-28 -->
+      <div class="cal-cell"><div class="dom">22</div></div>
+      <div class="cal-cell"><div class="dom">23</div><span class="cal-event ev-bill">Healthy Paws</span><span class="cal-event ev-airbnb">↳ checkout</span></div>
+      <div class="cal-cell"><div class="dom">24</div></div>
+      <div class="cal-cell"><div class="dom">25</div><span class="cal-event ev-bethany">Vet — Ruby</span></div>
+      <div class="cal-cell"><div class="dom">26</div></div>
+      <div class="cal-cell"><div class="dom">27</div><span class="cal-event ev-bill">NW Natural</span><span class="cal-event ev-jeff">Jill review</span></div>
+      <div class="cal-cell"><div class="dom">28</div><span class="cal-event ev-bill">Student Loan</span><span class="cal-event ev-bill">Payday 💰</span></div>
+
+      <!-- Week 6: Mar 1-7 -->
+      <div class="cal-cell other-month"><div class="dom">1</div></div>
+      <div class="cal-cell other-month"><div class="dom">2</div></div>
+      <div class="cal-cell other-month"><div class="dom">3</div></div>
+      <div class="cal-cell other-month"><div class="dom">4</div></div>
+      <div class="cal-cell other-month"><div class="dom">5</div></div>
+      <div class="cal-cell other-month"><div class="dom">6</div></div>
+      <div class="cal-cell other-month"><div class="dom">7</div></div>
+    </div>
+    <div class="cal-legend">
+      <span><i class="ev-jeff" style="display:inline-block;width:8px;height:8px;border-radius:2px;"></i> Jeff</span>
+      <span><i class="ev-bethany" style="display:inline-block;width:8px;height:8px;border-radius:2px;"></i> Bethany</span>
+      <span><i class="ev-airbnb" style="display:inline-block;width:8px;height:8px;border-radius:2px;"></i> Airbnb</span>
+      <span><i class="ev-bill" style="display:inline-block;width:8px;height:8px;border-radius:2px;"></i> Bills</span>
+    </div>
+  </div>
+
+  <!-- SHOPPING LIST -->
+  <div class="card">
+    <div class="card-title">Shopping List</div>
+    <div class="list-item"><div class="list-check"></div><span class="list-text">Dog food (Costco)</span></div>
+    <div class="list-item"><div class="list-check"></div><span class="list-text">Paper towels</span></div>
+    <div class="list-item"><div class="list-check"></div><span class="list-text">Half & half</span></div>
+    <div class="list-item"><div class="list-check done"></div><span class="list-text done">Bananas</span></div>
+    <div class="list-item"><div class="list-check done"></div><span class="list-text done">Ruby's meds — refill</span></div>
+    <div class="list-add">
+      <input placeholder="Add item…">
+      <button>Add</button>
+    </div>
+  </div>
+
+  <!-- TO-DO LIST -->
+  <div class="card">
+    <div class="card-title">To-Do</div>
+    <div class="list-item"><div class="list-check"></div><span class="list-text">Set up Capital One autopay</span></div>
+    <div class="list-item"><div class="list-check"></div><span class="list-text">Ask Bethany re: IMA DIRECTPAY</span></div>
+    <div class="list-item"><div class="list-check"></div><span class="list-text">Buy 2 Fire tablets</span></div>
+    <div class="list-item"><div class="list-check done"></div><span class="list-text done">Get dashboard live ✓</span></div>
+    <div class="list-add">
+      <input placeholder="Add task…">
+      <button>Add</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">BRUSS HOUSEHOLD DASHBOARD · MOCKUP · V2 DESIGN DIRECTION</div>
+
+<script>
+function tick(){const d=new Date(),h=d.getHours(),m=d.getMinutes(),s=d.getSeconds();const ap=h>=12?'PM':'AM';const h12=h%12||12;document.getElementById('clock').textContent=String(h12).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')+' '+ap;}
+tick();setInterval(tick,1000);
+</script>
+</body>
+</html>
