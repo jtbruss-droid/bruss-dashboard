@@ -1,0 +1,44 @@
+This project builds two related but separate systems for the Bruss household in Portland, OR.
+
+HOUSEHOLD STATUS BOARD — A persistent dashboard displayed on cheap tablets (Fire tablets in kiosk mode) throughout the house. All screens show the same content: combined family calendar (Microsoft/Outlook), weather, shopping list, and a simplified financial pulse widget adapted from the existing daily forecast tool (see bruss_daily_forecast.jsx). Husband and wife should both be able to access it from their phones when away from home.
+
+ADU GUEST BOARD — A guest-facing display for "The PDX Loft," an Airbnb-operated 473 sq ft ADU on the same property. One tablet in the unit plus QR code for guests' phones via browser. Shows stay info, house manual, weather, local tips. No surveillance, no tracking, no personal data collection. Must comply with Airbnb's rules. Completely separate from household data — a guest must never see household financial, calendar, or personal information.
+
+ABOUT JEFF (primary user):
+- Not a developer but can follow detailed step-by-step instructions. Don't assume CLI fluency — spell out commands and explain what they do.
+- Loses motivation without daily visibility into household status. The entire dashboard concept exists to serve this behavioral pattern. If it's not dead simple to glance at, it will fail.
+- Currently in an active debt snowball ($86K non-mortgage, target December 2029). Budget for this project is $250–450 total, no monthly SaaS. Self-hosted, minimal ongoing cost.
+- Uses Microsoft/Outlook for calendars. Both Jeff and Bethany are comfortable with Microsoft 365.
+- Has a Ring security system (hub, doorbell, base station) but no home automation hub. Ring integration is not a priority but may come later.
+- Manages the Airbnb via Hosttools (channel manager), which provides iCal feeds.
+
+TECHNICAL CONSTRAINTS:
+- Hardware: Fire tablets or similar cheap tablets in kiosk mode, Raspberry Pi or old laptop as server
+- Self-hosted on home network. Cloudflare Tunnel or Tailscale for remote access.
+- The financial forecast tool (bruss_daily_forecast.jsx) is a working React artifact. The dashboard needs a simplified "glanceable" version of it, not the full interactive tool.
+- The SPEC_daily_forecast_tool.md contains every recurring bill, amount, date, and seasonal pattern. Use it as the financial data source.
+- bruss_financial_bible.md has comprehensive household context — income, debt, banking, behavioral insights.
+
+PHASING:
+1. Household board MVP (calendar + weather + financial pulse on 1–2 tablets)
+2. Guest board MVP (stay info + house manual + weather on 1 tablet + QR)
+3. Expand (shopping list, more tablets, polish)
+4. Automation exploration (smart lock, thermostat, lighting — future)
+
+SCOPE — IN:
+- Household dashboard design, build, and deployment
+- Guest board design, build, and deployment
+- Calendar integration (Outlook + Hosttools iCal)
+- Weather integration
+- Financial pulse widget (adapted from existing forecast tool)
+- Shopping list feature
+- Hardware selection and setup guidance (tablets, server)
+- Network architecture (how tablets talk to server, remote access)
+- Airbnb occupancy status on the household board (one-directional: bookings → household view)
+
+SCOPE — OUT:
+- Airbnb listing optimization, pricing, guest communication (separate Airbnb project)
+- Home automation hardware (smart locks, thermostats) — Phase 4, not now
+- Ring integration — future, not now
+- HomeAssistant — only if dashboard evaluation points there
+- Anything requiring professional installation or monthly subscriptions
