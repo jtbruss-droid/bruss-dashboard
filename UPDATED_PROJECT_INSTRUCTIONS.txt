@@ -1,0 +1,109 @@
+# BRUSS DASHBOARD — PROJECT INSTRUCTIONS
+### Last updated: February 21, 2026
+
+---
+
+## WHAT THIS PROJECT IS
+
+Two systems for the Bruss household in Portland, OR:
+
+1. **Household Status Board** — Persistent dashboard on cheap tablets (Amazon Fire, kiosk mode) throughout the house. Calendar (Outlook + Hosttools iCal), weather, shopping list, financial pulse widget.
+
+2. **ADU Guest Board** — Guest-facing display for "The PDX Loft" Airbnb ADU. Stay info, house manual, weather, local tips. QR code for guest phones. No household data, no surveillance, Airbnb-compliant.
+
+---
+
+## JEFF'S PREFERENCES — READ THESE FIRST
+
+- Give direct URLs, never click trails. Example: https://github.com/settings/tokens not "go to Settings, click Developer Settings..."
+- Always specify WHERE to run commands: "regular terminal" or "Claude Code" — never "Window 1" or "Window 2"
+- Warn before asking for any token, password, or secret
+- Produce a handoff document at the end of every session, proactively
+- Jeff loses motivation without visible progress — show working things fast, don't get lost in setup
+- He is on a Mac (Apple Silicon M5), home WiFi, no unusual configurations
+
+---
+
+## JEFF'S TECHNICAL PROFILE
+
+- Reasonably comfortable in terminal, not a developer
+- GitHub: https://github.com/jtbruss-droid
+- Local project folder: ~/bruss-dashboard
+- Claude Code installed and working
+- Uses Microsoft/Outlook for calendars
+- Manages Airbnb via Hosttools (provides iCal feeds)
+- Has Ring security system (not a priority for this project)
+- Budget: $250–450 total, no monthly SaaS subscriptions
+
+---
+
+## INFRASTRUCTURE STATUS (as of Feb 21, 2026)
+
+- Homebrew: installed ✓
+- Node.js: installed ✓
+- Claude Code: installed ✓
+- Git: configured ✓ (Jeff Bruss / jtbruss@gmail.com)
+- GitHub repo: https://github.com/jtbruss-droid/bruss-dashboard (private) ✓
+- Local folder: ~/bruss-dashboard ✓
+- Project files on Mac: NOT YET — run bootstrap.sh first (see below)
+
+## FIRST THING TO DO IN ANY NEW SESSION
+
+Ask Jeff to run this in the regular terminal:
+```bash
+ls ~/bruss-dashboard
+```
+If the project files are there and non-empty, proceed. If not, have him download and run bootstrap.sh from the project outputs.
+
+---
+
+## THE EXISTING FORECAST TOOL
+
+`bruss_daily_forecast.jsx` is a complete working React app. It forecasts the Bruss checking account balance day by day, 6 months forward. All bill amounts, dates, and seasonal patterns are hardcoded from a 24-month transaction audit. Uses window.storage for persistence (shared: true so both Jeff and Bethany see the same data).
+
+This tool is DONE. The dashboard needs a simplified glanceable widget extracted from it — not a rebuild.
+
+---
+
+## PROJECT PHASING
+
+**Phase 1 (current): Household board MVP**
+- Financial pulse widget (simplified from bruss_daily_forecast.jsx)
+- Weather widget (Open-Meteo API — free, no API key required)
+- Calendar integration (Outlook + Hosttools iCal)
+- Deploy on 1–2 Fire tablets
+
+**Phase 2: Guest board MVP**
+- Stay info, house manual, weather, local tips
+- QR code access
+- 1 tablet in ADU
+
+**Phase 3: Expand**
+- Shopping list
+- More tablets
+- Airbnb occupancy on household board
+
+**Phase 4: Automation (future)**
+- Smart lock, thermostat, lighting
+- Possibly HomeAssistant
+
+---
+
+## KEY FINANCIAL DATA
+
+All bill amounts, dates, and seasonal patterns are in bruss_daily_forecast.jsx and SPEC_daily_forecast_tool.md. Full household financial context in bruss_financial_bible.md.
+
+- Primary checking: NW Preferred CU account S0055
+- Jeff paycheck: $2,728.45 bi-weekly (15th + last business day)
+- Bethany paycheck: $3,259.00 bi-weekly (same days as Jeff)
+- ADU income: ~$300/mo winter, ~$2,000/mo summer
+- Non-mortgage debt: $86K, snowball to December 2029
+
+---
+
+## HARDWARE TARGET
+
+- Server: Raspberry Pi 4 or old laptop on home network
+- Displays: Amazon Fire tablets in kiosk mode (full-screen browser)
+- Remote access: Cloudflare Tunnel or Tailscale (free)
+- ADU display: 1 tablet + QR code for guest phones
