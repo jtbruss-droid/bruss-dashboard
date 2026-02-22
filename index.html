@@ -17,11 +17,14 @@
       --accent:    #6d28d9;
       --accent-lt: #ede9fe;
       --green:     #16a34a;
-      --green-lt:  #dcfce7;
+      --green-lt:  #f0fdf4;
+      --green-bd:  #bbf7d0;
       --yellow:    #d97706;
-      --yellow-lt: #fef9c3;
+      --yellow-lt: #fefce8;
+      --yellow-bd: #fde68a;
       --red:       #dc2626;
-      --red-lt:    #fee2e2;
+      --red-lt:    #fef2f2;
+      --red-bd:    #fecaca;
     }
 
     body {
@@ -29,288 +32,437 @@
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
     }
 
     /* ── HEADER ── */
     .header {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      padding: 14px 28px;
+      padding: 12px 28px;
       background: var(--surface);
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 100;
+      gap: 16px;
     }
-    .header-account {
-      font-size: 0.6rem;
-      letter-spacing: 0.18em;
-      color: var(--accent);
-      text-transform: uppercase;
-      font-weight: 700;
-    }
-    .header-date {
-      font-size: 0.72rem;
-      color: var(--muted);
-      margin-top: 3px;
-    }
-    .clock {
-      font-size: 2.2rem;
-      font-weight: 300;
-      letter-spacing: -0.03em;
-      color: var(--text);
-      font-variant-numeric: tabular-nums;
-      font-family: ui-monospace, monospace;
-    }
-
-    /* ── MAIN GRID ── */
-    .main {
-      display: grid;
-      grid-template-columns: 55% 45%;
-      flex: 1;
-    }
-
-    /* ── PANELS ── */
-    .panel {
-      background: var(--surface);
-      padding: 28px 32px;
-      border-right: 1px solid var(--border);
-    }
-    .panel:last-child { border-right: none; }
-
-    .panel-label {
-      font-size: 0.6rem;
+    .hdr-left { min-width: 0; }
+    .hdr-account {
+      font-size: 0.58rem;
       letter-spacing: 0.2em;
       color: var(--accent);
       text-transform: uppercase;
       font-weight: 700;
-      margin-bottom: 20px;
     }
-
-    /* ── BALANCE ── */
+    .hdr-date {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .hdr-center {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: center;
+    }
+    .hdr-balance { display: flex; align-items: baseline; gap: 10px; }
     .balance-num {
-      font-size: clamp(3rem, 6vw, 5.2rem);
+      font-size: 1.9rem;
       font-weight: 300;
-      letter-spacing: -0.04em;
-      line-height: 1;
+      letter-spacing: -0.03em;
       font-variant-numeric: tabular-nums;
       font-family: ui-monospace, monospace;
-      transition: color 0.4s;
     }
     .bal-green  { color: var(--green); }
     .bal-yellow { color: var(--yellow); }
     .bal-red    { color: var(--red); }
     .bal-dim    { color: var(--faint); }
-
     .status-badge {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      margin-top: 10px;
-      padding: 4px 12px;
+      padding: 2px 9px;
       border-radius: 20px;
-      font-size: 0.62rem;
+      font-size: 0.58rem;
       font-weight: 700;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
+      white-space: nowrap;
     }
-    .bdg-green  { background: var(--green-lt);  color: var(--green); }
-    .bdg-yellow { background: var(--yellow-lt); color: var(--yellow); }
-    .bdg-red    { background: var(--red-lt);    color: var(--red); }
-
-    .balance-sub {
-      font-size: 0.62rem;
-      color: var(--faint);
-      margin-top: 8px;
-      letter-spacing: 0.04em;
-    }
-
-    /* ── SEED INPUT ── */
-    .seed-row {
-      display: flex;
-      gap: 8px;
-      margin-top: 16px;
-      align-items: center;
-    }
+    .bdg-green  { background: var(--green-lt);  color: var(--green); border: 1px solid var(--green-bd); }
+    .bdg-yellow { background: var(--yellow-lt); color: var(--yellow); border: 1px solid var(--yellow-bd); }
+    .bdg-red    { background: var(--red-lt);    color: var(--red); border: 1px solid var(--red-bd); }
+    .seed-row { display: flex; gap: 6px; align-items: center; }
     .seed-row input {
       background: var(--bg);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px 12px;
+      border-radius: 7px;
+      padding: 6px 10px;
       color: var(--text);
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       font-family: inherit;
       outline: none;
-      width: 200px;
-      transition: border-color 0.15s;
+      width: 180px;
     }
     .seed-row input:focus { border-color: var(--accent); }
     .seed-row button {
       background: var(--accent);
       border: none;
-      border-radius: 8px;
-      padding: 8px 16px;
+      border-radius: 7px;
+      padding: 6px 14px;
       color: #fff;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-family: inherit;
       font-weight: 600;
       cursor: pointer;
+      white-space: nowrap;
+    }
+    .clock {
+      font-size: 1.8rem;
+      font-weight: 300;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+      font-family: ui-monospace, monospace;
+      text-align: right;
     }
 
-    /* ── DIVIDER ── */
-    .divider {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 22px 0;
+    /* ── CALENDAR SECTION ── */
+    .cal-section {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 20px 20px;
     }
-
-    /* ── UPCOMING DAYS ── */
-    .upcoming-label {
-      font-size: 0.6rem;
-      letter-spacing: 0.18em;
+    .cal-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .cal-nav-group { display: flex; align-items: center; gap: 10px; }
+    .cal-month-label {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      min-width: 200px;
+      text-align: center;
+    }
+    .cal-nav-btn {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      width: 34px; height: 34px;
+      font-size: 1.1rem;
       color: var(--muted);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.1s;
+    }
+    .cal-nav-btn:hover { background: var(--border); }
+    .cal-today-btn {
+      background: var(--accent-lt);
+      border: none;
+      border-radius: 7px;
+      padding: 5px 14px;
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+    }
+    .cal-legend {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .leg-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.62rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .leg-swatch {
+      width: 12px; height: 12px;
+      border-radius: 3px;
+      border: 1px solid;
+      flex-shrink: 0;
+    }
+    .leg-dot { font-size: 0.62rem; color: var(--muted); }
+    .leg-dot-g { color: #16a34a; }
+    .leg-dot-r { color: #dc2626; }
+
+    /* ── CALENDAR GRID ── */
+    .cal-dow {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      margin: 12px 0 4px;
+    }
+    .cal-dow > div {
+      text-align: center;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--faint);
       text-transform: uppercase;
-      font-weight: 600;
+      padding: 4px 0;
+    }
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+    .cal-cell {
+      min-height: 88px;
+      border-radius: 8px;
+      padding: 7px 8px 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: box-shadow 0.12s;
+    }
+    .cal-cell:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .cal-cell.off-month { opacity: 0.32; }
+    .cal-cell.c-past { opacity: 0.6; }
+    .cal-cell.c-today { border-color: var(--accent) !important; border-width: 2px; }
+    .cal-cell.c-green  { background: var(--green-lt);  border-color: var(--green-bd); }
+    .cal-cell.c-yellow { background: var(--yellow-lt); border-color: var(--yellow-bd); }
+    .cal-cell.c-red    { background: var(--red-lt);    border-color: var(--red-bd); }
+    .cal-cell.c-neg    { background: #fee2e2; border-color: #f87171; }
+
+    .cell-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .cell-day {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+      line-height: 1;
+    }
+    .c-today .cell-day {
+      background: var(--accent);
+      color: #fff;
+      border-radius: 50%;
+      width: 22px; height: 22px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+    .cell-bal {
+      font-size: 0.78rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      font-family: ui-monospace, monospace;
+      line-height: 1;
+    }
+    .cell-bal.cb-green  { color: var(--green); }
+    .cell-bal.cb-yellow { color: var(--yellow); }
+    .cell-bal.cb-red    { color: var(--red); }
+    .cell-bal.cb-neg    { color: #b91c1c; }
+    .cell-bal.cb-dim    { color: var(--faint); }
+    .cell-dots {
+      display: flex;
+      gap: 3px;
+      margin-top: 4px;
+    }
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-income  { background: #16a34a; }
+    .dot-bigbill { background: #dc2626; }
+    .dot-bill    { background: #f97316; opacity: 0.7; }
+
+    /* ── LOWER PANELS ── */
+    .lower-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+    .panel {
+      background: var(--surface);
+      padding: 24px 28px;
+      border-right: 1px solid var(--border);
+    }
+    .panel:last-child { border-right: none; }
+    .panel-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      text-transform: uppercase;
+      font-weight: 700;
       margin-bottom: 16px;
     }
 
+    /* ── NEXT 3 DAYS ── */
     .day-block {
-      margin-bottom: 20px;
-      padding: 14px 16px;
+      margin-bottom: 14px;
+      padding: 12px 14px;
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 10px;
     }
-
     .day-header {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
-    .day-name {
-      font-size: 0.78rem;
-      color: var(--text);
-      font-weight: 700;
-    }
-    .day-bal {
-      font-size: 1.1rem;
-      font-weight: 700;
-      font-variant-numeric: tabular-nums;
-      font-family: ui-monospace, monospace;
-    }
-
+    .day-name { font-size: 0.78rem; font-weight: 700; }
+    .day-bal  { font-size: 1rem; font-weight: 700; font-variant-numeric: tabular-nums; font-family: ui-monospace, monospace; }
     .txn-row {
       display: flex;
       justify-content: space-between;
-      font-size: 0.75rem;
+      font-size: 0.73rem;
       padding: 3px 0;
       color: var(--muted);
       border-top: 1px solid var(--border);
     }
-    .txn-row:first-of-type { border-top: none; }
     .txn-row span:last-child { font-variant-numeric: tabular-nums; font-family: ui-monospace, monospace; }
     .pos   { color: var(--green); font-weight: 600; }
     .neg   { color: var(--red); }
     .allow { color: var(--accent); }
-    .ghost { color: var(--faint); font-style: italic; }
+    .ghost { color: var(--faint); font-style: italic; font-size: 0.72rem; }
 
     /* ── WEATHER ── */
-    .weather-now {
-      display: flex;
-      align-items: flex-start;
-      gap: 20px;
-      margin-bottom: 8px;
-    }
-    .wx-icon { font-size: 4rem; line-height: 1; }
+    .weather-now { display: flex; align-items: flex-start; gap: 18px; margin-bottom: 8px; }
+    .wx-icon { font-size: 3.5rem; line-height: 1; }
     .wx-temp {
-      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      font-size: clamp(2.4rem, 4vw, 3.8rem);
       font-weight: 300;
       letter-spacing: -0.04em;
       line-height: 1;
       font-variant-numeric: tabular-nums;
       font-family: ui-monospace, monospace;
     }
-    .wx-desc {
-      font-size: 0.95rem;
-      color: var(--muted);
-      margin-top: 6px;
-    }
-    .wx-detail {
-      font-size: 0.68rem;
-      color: var(--faint);
-      margin-top: 4px;
-    }
-
-    /* ── FORECAST STRIP ── */
-    .fc-strip {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin-top: 8px;
-    }
+    .wx-desc { font-size: 0.88rem; color: var(--muted); margin-top: 5px; }
+    .wx-detail { font-size: 0.65rem; color: var(--faint); margin-top: 3px; }
+    .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+    .fc-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
     .fc-day {
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 12px 6px;
+      padding: 10px 5px;
       text-align: center;
     }
-    .fc-dayname {
-      font-size: 0.58rem;
-      color: var(--faint);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-    .fc-icon { font-size: 1.6rem; margin-bottom: 5px; }
-    .fc-hi {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--text);
-      font-variant-numeric: tabular-nums;
-    }
-    .fc-lo {
-      font-size: 0.72rem;
-      color: var(--faint);
-      font-variant-numeric: tabular-nums;
-      margin-top: 1px;
-    }
-    .fc-precip {
-      font-size: 0.6rem;
-      color: #3b82f6;
-      margin-top: 5px;
-    }
+    .fc-dayname { font-size: 0.56rem; color: var(--faint); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 5px; font-weight: 600; }
+    .fc-icon { font-size: 1.4rem; margin-bottom: 4px; }
+    .fc-hi { font-size: 0.92rem; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+    .fc-lo { font-size: 0.68rem; color: var(--faint); font-variant-numeric: tabular-nums; }
+    .fc-precip { font-size: 0.58rem; color: #3b82f6; margin-top: 4px; }
 
-    /* ── MONTHLY BILLS SECTION ── */
+    /* ── BILLS SECTION ── */
+    .bills-section {
+      background: var(--surface);
+      padding: 24px 28px 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .bills-section .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .bills-section .section-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .bills-section .section-sublabel {
+      font-size: 0.65rem;
+      color: var(--faint);
+    }
     .bills-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 6px;
+      gap: 4px 24px;
     }
-    .bill-item {
+    .bill-row {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      font-size: 0.72rem;
-      padding: 5px 8px;
+      gap: 10px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .bill-day-badge {
+      flex-shrink: 0;
+      min-width: 32px;
+      text-align: center;
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: var(--muted);
       background: var(--bg);
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 5px;
+      padding: 2px 5px;
+      font-variant-numeric: tabular-nums;
+      font-family: ui-monospace, monospace;
     }
-    .bill-name { color: var(--muted); }
-    .bill-amt { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; font-family: ui-monospace, monospace; }
+    .bill-day-badge.due-soon {
+      background: #fefce8;
+      border-color: var(--yellow-bd);
+      color: var(--yellow);
+    }
+    .bill-day-badge.due-today {
+      background: var(--red-lt);
+      border-color: var(--red-bd);
+      color: var(--red);
+    }
+    .bill-link {
+      flex: 1;
+      font-size: 0.78rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .bill-link:hover { text-decoration: underline; }
+    .bill-amt {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+      font-family: ui-monospace, monospace;
+      flex-shrink: 0;
+      text-align: right;
+      min-width: 70px;
+    }
+    .bills-periodic-title {
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      color: var(--faint);
+      text-transform: uppercase;
+      font-weight: 600;
+      margin: 18px 0 6px;
+    }
+    .bills-periodic-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 4px 24px;
+    }
 
     /* ── FOOTER ── */
     .footer {
       border-top: 1px solid var(--border);
       background: var(--surface);
       padding: 10px 28px;
-      font-size: 0.55rem;
+      font-size: 0.52rem;
       color: var(--faint);
       letter-spacing: 0.1em;
       display: flex;
@@ -322,71 +474,119 @@
     .err     { color: var(--red);   font-size: 0.75rem; }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 720px) {
-      .main { grid-template-columns: 1fr; }
+    @media (max-width: 900px) {
+      .lower-panels { grid-template-columns: 1fr; }
       .panel { border-right: none; border-bottom: 1px solid var(--border); }
-      .clock { font-size: 1.6rem; }
-      .balance-num { font-size: clamp(2.4rem, 11vw, 3.6rem); }
-      .wx-temp { font-size: clamp(2.2rem, 11vw, 3.6rem); }
       .bills-grid { grid-template-columns: 1fr; }
+      .bills-periodic-grid { grid-template-columns: 1fr; }
+      .header { grid-template-columns: 1fr 1fr; }
+      .hdr-center { display: none; }
+      .clock { text-align: right; }
+    }
+    @media (max-width: 600px) {
+      .cal-section { padding: 12px 8px 14px; }
+      .cal-cell { min-height: 62px; padding: 4px 5px; }
+      .cell-day { font-size: 0.68rem; }
+      .cell-bal { font-size: 0.62rem; }
+      .cal-month-label { font-size: 0.95rem; min-width: 0; }
     }
   </style>
 </head>
 <body>
 
 <!-- HEADER -->
-<div class="header">
-  <div>
-    <div class="header-account">BRUSS &middot; NW PREFERRED S0055</div>
-    <div class="header-date" id="header-date"></div>
+<header class="header">
+  <div class="hdr-left">
+    <div class="hdr-account">BRUSS &middot; NW PREFERRED S0055</div>
+    <div class="hdr-date" id="header-date"></div>
   </div>
-  <div class="clock" id="clock"></div>
-</div>
 
-<!-- MAIN -->
-<div class="main">
-
-  <!-- ══ FINANCIAL PULSE ══ -->
-  <div class="panel">
-    <div class="panel-label">Financial Pulse</div>
-
-    <div class="balance-num bal-dim" id="balance-num">—</div>
-    <div id="status-badge"></div>
-    <div class="balance-sub">PREDICTED CHECKING BALANCE &middot; S0055</div>
-
+  <div class="hdr-center">
+    <div class="hdr-balance">
+      <div class="balance-num bal-dim" id="balance-num">—</div>
+      <div id="status-badge"></div>
+    </div>
     <div class="seed-row">
       <input id="seed-input" type="number" placeholder="Enter current balance…"
              onkeydown="if(event.key==='Enter')setSeed()">
-      <button onclick="setSeed()">Set Balance</button>
+      <button onclick="setSeed()">Set</button>
     </div>
-
-    <hr class="divider">
-
-    <div class="upcoming-label">Next 3 Days</div>
-    <div id="upcoming-days"><div class="loading">Building forecast…</div></div>
   </div>
 
-  <!-- ══ RIGHT COLUMN ══ -->
+  <div class="clock" id="clock"></div>
+</header>
+
+<!-- ══════════ CALENDAR ══════════ -->
+<section class="cal-section">
+
+  <div class="cal-topbar">
+    <div class="cal-nav-group">
+      <button class="cal-nav-btn" onclick="prevMonth()" title="Previous month">&#8249;</button>
+      <div class="cal-month-label" id="cal-month-label"></div>
+      <button class="cal-nav-btn" onclick="nextMonth()" title="Next month">&#8250;</button>
+      <button class="cal-today-btn" id="cal-today-btn" onclick="goToday()">Today</button>
+    </div>
+    <div class="cal-legend">
+      <span class="leg-item">
+        <span class="leg-swatch" style="background:var(--green-lt);border-color:var(--green-bd)"></span>
+        &ge; $1,000
+      </span>
+      <span class="leg-item">
+        <span class="leg-swatch" style="background:var(--yellow-lt);border-color:var(--yellow-bd)"></span>
+        $500 &ndash; $999
+      </span>
+      <span class="leg-item">
+        <span class="leg-swatch" style="background:var(--red-lt);border-color:var(--red-bd)"></span>
+        &lt; $500
+      </span>
+      <span class="leg-dot leg-dot-g">&#9679; Income</span>
+      <span class="leg-dot leg-dot-r">&#9679; Bill &ge;$500</span>
+    </div>
+  </div>
+
+  <div class="cal-dow">
+    <div>Sun</div><div>Mon</div><div>Tue</div>
+    <div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+  </div>
+  <div class="cal-grid" id="cal-grid">
+    <div class="loading" style="grid-column:1/-1;padding:24px 0">Building calendar&hellip;</div>
+  </div>
+
+</section>
+
+<!-- ══════════ LOWER PANELS ══════════ -->
+<div class="lower-panels">
+
+  <!-- Next 3 Days -->
+  <div class="panel">
+    <div class="panel-label">Next 3 Days</div>
+    <div id="upcoming-days"><div class="loading">Building forecast&hellip;</div></div>
+  </div>
+
+  <!-- Weather -->
   <div class="panel">
     <div class="panel-label">Portland, OR &middot; Weather</div>
-
-    <div id="weather-now"><div class="loading">Fetching weather…</div></div>
+    <div id="weather-now"><div class="loading">Fetching weather&hellip;</div></div>
     <hr class="divider">
-    <div id="fc-strip"><div class="loading">Loading forecast…</div></div>
-
-    <hr class="divider">
-
-    <div class="panel-label">Monthly Bills</div>
-    <div id="bills-list"></div>
+    <div id="fc-strip"><div class="loading">Loading forecast&hellip;</div></div>
   </div>
 
 </div>
 
+<!-- ══════════ MONTHLY BILLS ══════════ -->
+<section class="bills-section">
+  <div class="section-header">
+    <div class="section-label">Monthly Bills</div>
+    <div class="section-sublabel" id="bills-month-label"></div>
+  </div>
+  <div id="bills-list"></div>
+</section>
+
 <!-- FOOTER -->
-<div class="footer">
-  <span>BRUSS HOUSEHOLD DASHBOARD &middot; v2.0</span>
+<footer class="footer">
+  <span>BRUSS HOUSEHOLD DASHBOARD &middot; v3.0</span>
   <span id="last-wx-refresh"></span>
-</div>
+</footer>
 
 <script>
 // ═══════════════════════════════════════════════════════
@@ -403,31 +603,31 @@ const MONTHLY_BETHANY    = 850.00;
 
 const NW_NATURAL_BY_MONTH    = [320, 280, 250, 200, 150, 107, 107, 107, 137, 137, 200, 280];
 const PACIFIC_POWER_BY_MONTH = [360, 382, 372, 303, 311, 318, 282, 433, 438, 381, 324, 373];
-const ADU_BY_MONTH           = [300, 300, 300,2000,2000,2000,2000,2000,2000,2000,2000, 300];
+const ADU_BY_MONTH           = [300, 300, 300, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 300];
 
 const MONTHLY_BILLS = [
-  { name:"Patreon",          amount:54.00,    day:1  },
-  { name:"Mission Lane",     amount:525.00,   day:4  },
-  { name:"Capital One",      amount:125.00,   day:5  },
-  { name:"T-Mobile",         amount:182.08,   day:6  },
-  { name:"Comcast ADU",      amount:104.00,   day:8  },
-  { name:"Amazon Prime",     amount:2.99,     day:9  },
-  { name:"Audible",          amount:14.95,    day:15 },
-  { name:"Pacific Power",    amount:null,     day:15, seasonal:"pacificpower" },
-  { name:"Cincinnati Ins.",  amount:440.00,   day:16 },
-  { name:"Mazda (CU)",       amount:519.00,   day:17 },
-  { name:"Mortgage",         amount:7006.33,  day:18 },
-  { name:"IRS",              amount:1000.00,  day:19 },
-  { name:"Disney+",          amount:15.99,    day:19 },
-  { name:"Comcast Main",     amount:115.00,   day:21 },
-  { name:"Healthy Paws",     amount:398.08,   day:23 },
-  { name:"NW Natural",       amount:null,     day:27, seasonal:"nwnatural" },
-  { name:"Student Loan",     amount:190.65,   day:28 },
-  { name:"Kia",              amount:563.86,   day:29 },
-  { name:"Arrowhead Ins.",   amount:43.00,    day:29 },
-  { name:"Home Depot",       amount:29.00,    day:29 },
-  { name:"Target Card",      amount:30.00,    day:30 },
-  { name:"Netflix",          amount:24.99,    day:30 },
+  { name:"Patreon",          amount:54.00,    day:1,  url:"https://www.patreon.com"                      },
+  { name:"Mission Lane",     amount:525.00,   day:4,  url:"https://www.missionlane.com"                  },
+  { name:"Capital One",      amount:125.00,   day:5,  url:"https://www.capitalone.com"                   },
+  { name:"T-Mobile",         amount:182.08,   day:6,  url:"https://www.t-mobile.com"                     },
+  { name:"Comcast ADU",      amount:104.00,   day:8,  url:"https://www.xfinity.com"                      },
+  { name:"Amazon Prime",     amount:2.99,     day:9,  url:"https://www.amazon.com"                       },
+  { name:"Audible",          amount:14.95,    day:15, url:"https://www.audible.com"                      },
+  { name:"Pacific Power",    amount:null,     day:15, url:"https://www.pacificpower.com", seasonal:"pacificpower" },
+  { name:"Cincinnati Ins.",  amount:440.00,   day:16, url:"https://www.cinfin.com"                       },
+  { name:"Mazda (CU)",       amount:519.00,   day:17, url:"https://www.mazdafinancialservices.com"       },
+  { name:"Mortgage",         amount:7006.33,  day:18, url:"https://www.nsmloans.com"                     },
+  { name:"IRS",              amount:1000.00,  day:19, url:"https://www.irs.gov"                          },
+  { name:"Disney+",          amount:15.99,    day:19, url:"https://www.disneyplus.com"                   },
+  { name:"Comcast Main",     amount:115.00,   day:21, url:"https://www.xfinity.com"                      },
+  { name:"Healthy Paws",     amount:398.08,   day:23, url:"https://www.healthypawspetinsurance.com"      },
+  { name:"NW Natural",       amount:null,     day:27, url:"https://www.nwnatural.com", seasonal:"nwnatural" },
+  { name:"Student Loan",     amount:190.65,   day:28, url:"https://studentaid.gov"                       },
+  { name:"Kia",              amount:563.86,   day:29, url:"https://www.kia.com/us/en/kia-finance"        },
+  { name:"Arrowhead Ins.",   amount:43.00,    day:29, url:"https://www.arrowheadgeneral.com"             },
+  { name:"Home Depot",       amount:29.00,    day:29, url:"https://www.homedepot.com"                    },
+  { name:"Target Card",      amount:30.00,    day:30, url:"https://www.target.com"                       },
+  { name:"Netflix",          amount:24.99,    day:30, url:"https://www.netflix.com"                      },
 ];
 
 const PERIODIC_BILLS = [
@@ -445,28 +645,23 @@ function lastBizDay(year, month) {
   while (d.getDay() === 0 || d.getDay() === 6) d.setDate(d.getDate() - 1);
   return d.getDate();
 }
-
 function isPayday(date) {
   const dom = date.getDate();
   const lbd = lastBizDay(date.getFullYear(), date.getMonth());
   return dom === 15 || dom === lbd;
 }
-
 function isFriday(d) { return d.getDay() === 5; }
-
 function dateKey(d) {
   return d.getFullYear() + '-' +
     String(d.getMonth()+1).padStart(2,'0') + '-' +
     String(d.getDate()).padStart(2,'0');
 }
-
 function fmt(n) {
   if (n == null) return '—';
   const abs = Math.abs(n);
   const s = abs.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return (n < 0 ? '-$' : '$') + s;
 }
-
 function fmtShort(n) {
   if (n == null) return '—';
   const abs = Math.abs(n);
@@ -475,16 +670,25 @@ function fmtShort(n) {
   if (abs >= 1000)  return sign + (abs/1000).toFixed(1) + 'k';
   return sign + abs.toFixed(0);
 }
+function ordinal(n) {
+  const s = ['th','st','nd','rd'];
+  const v = n % 100;
+  return n + (s[(v-20)%10] || s[v] || s[0]);
+}
 
 // ═══════════════════════════════════════════════════════
 // FORECAST ENGINE
 // ═══════════════════════════════════════════════════════
 
+let _forecastCache = null;
+let _forecastSeed  = null;
+
 function buildForecast(startBal) {
+  if (_forecastSeed === startBal && _forecastCache) return _forecastCache;
   const today = new Date(); today.setHours(0,0,0,0);
   const map = {};
   let balance = startBal;
-  const end = new Date(today.getFullYear(), today.getMonth() + 3, 0);
+  const end = new Date(today.getFullYear(), today.getMonth() + 4, 0);
 
   for (let d = new Date(today); d <= end; d.setDate(d.getDate()+1)) {
     const date = new Date(d);
@@ -492,23 +696,17 @@ function buildForecast(startBal) {
     const dom = date.getDate();
     const txns = [];
 
-    // Income
     if (isPayday(date)) {
       txns.push({ name:"Jeff Paycheck",    amount: JEFF_PAYCHECK,    type:"income" });
       txns.push({ name:"Bethany Paycheck", amount: BETHANY_PAYCHECK, type:"income" });
     }
-    if (dom === 5)
-      txns.push({ name:"EPBB Cell Stipend", amount: EPBB_STIPEND, type:"income" });
+    if (dom === 5)  txns.push({ name:"EPBB Cell Stipend", amount: EPBB_STIPEND, type:"income" });
     if (dom === 1 && ADU_BY_MONTH[m] > 0)
       txns.push({ name:"ADU Income", amount: ADU_BY_MONTH[m], type:"income" });
-
-    // Allowances (weekly Fridays)
     if (isFriday(date)) {
       txns.push({ name:"Jeff Allowance",    amount: -WEEKLY_JEFF,    type:"allowance" });
       txns.push({ name:"Bethany Allowance", amount: -WEEKLY_BETHANY, type:"allowance" });
     }
-
-    // Monthly bills
     for (const b of MONTHLY_BILLS) {
       const lastDom = new Date(date.getFullYear(), m+1, 0).getDate();
       const billDay = Math.min(b.day, lastDom);
@@ -519,61 +717,164 @@ function buildForecast(startBal) {
         txns.push({ name: b.name, amount: -amt, type:"expense" });
       }
     }
-
-    // Periodic bills
     for (const b of PERIODIC_BILLS) {
       if (b.months.includes(m) && dom === b.day)
         txns.push({ name: b.name, amount: -b.amount, type:"expense" });
     }
-
     balance += txns.reduce((s,t) => s + t.amount, 0);
     map[dateKey(date)] = { balance, txns };
   }
-
+  _forecastSeed  = startBal;
+  _forecastCache = map;
   return map;
 }
 
-// ═══════════════════════════════════════════════════════
-// FINANCIAL RENDER
-// ═══════════════════════════════════════════════════════
+function getSeed() { return parseFloat(localStorage.getItem('bruss:seed') || '3000'); }
 
-function balClass(n) {
-  if (n >= 1000) return 'bal-green';
-  if (n >= 500)  return 'bal-yellow';
-  return 'bal-red';
+function balColorClass(n) {
+  if (n == null) return '';
+  if (n >= 1000) return 'c-green';
+  if (n >= 500)  return 'c-yellow';
+  if (n >= 0)    return 'c-red';
+  return 'c-neg';
+}
+function balNumClass(n) {
+  if (n == null) return 'cb-dim';
+  if (n >= 1000) return 'cb-green';
+  if (n >= 500)  return 'cb-yellow';
+  if (n >= 0)    return 'cb-red';
+  return 'cb-neg';
 }
 function balColor(n) {
+  if (n == null) return 'var(--faint)';
   if (n >= 1000) return 'var(--green)';
   if (n >= 500)  return 'var(--yellow)';
   return 'var(--red)';
 }
-function badgeHtml(n) {
-  if (n >= 1000) return '<span class="status-badge bdg-green">&#10003; On Track</span>';
-  if (n >= 500)  return '<span class="status-badge bdg-yellow">&#9650; Low Buffer</span>';
-  return '<span class="status-badge bdg-red">&#9888; Danger</span>';
+
+// ═══════════════════════════════════════════════════════
+// CALENDAR
+// ═══════════════════════════════════════════════════════
+
+const today = new Date(); today.setHours(0,0,0,0);
+const todayKey = dateKey(today);
+let calYear  = today.getFullYear();
+let calMonth = today.getMonth();
+
+function calendarCells(year, month) {
+  const firstDow   = new Date(year, month, 1).getDay();
+  const daysInMon  = new Date(year, month+1, 0).getDate();
+  const prevDays   = new Date(year, month, 0).getDate();
+  const cells = [];
+  // Leading days from prev month
+  for (let i = firstDow - 1; i >= 0; i--)
+    cells.push({ dom: prevDays - i, m: month-1 < 0 ? 11 : month-1, y: month === 0 ? year-1 : year, current: false });
+  // Current month
+  for (let d = 1; d <= daysInMon; d++)
+    cells.push({ dom: d, m: month, y: year, current: true });
+  // Trailing days from next month (always fill to 42)
+  let nd = 1;
+  while (cells.length < 42)
+    cells.push({ dom: nd++, m: month+1 > 11 ? 0 : month+1, y: month === 11 ? year+1 : year, current: false });
+  return cells;
 }
 
+function renderCalendar() {
+  const fc = buildForecast(getSeed());
+  const cells = calendarCells(calYear, calMonth);
+  const monthLabel = new Date(calYear, calMonth).toLocaleDateString('en-US', {month:'long', year:'numeric'});
+  document.getElementById('cal-month-label').textContent = monthLabel;
+  document.getElementById('cal-today-btn').style.display =
+    (calYear === today.getFullYear() && calMonth === today.getMonth()) ? 'none' : '';
+
+  let html = '';
+  for (const c of cells) {
+    const d   = new Date(c.y, c.m, c.dom);
+    const dk  = dateKey(d);
+    const data = fc[dk];
+    const bal  = data ? data.balance : null;
+    const isPast    = d < today;
+    const isToday   = dk === todayKey;
+    const hasTxns   = data && data.txns.length > 0;
+    const hasIncome = hasTxns && data.txns.some(t => t.type === 'income');
+    const hasBig    = hasTxns && data.txns.some(t => t.amount <= -500);
+    const hasBill   = hasTxns && !hasIncome && !hasBig && data.txns.some(t => t.type === 'expense');
+
+    let cls = 'cal-cell';
+    if (!c.current) cls += ' off-month';
+    else if (isPast) cls += ' c-past';
+    if (isToday)  cls += ' c-today';
+    if (bal !== null && !isPast && c.current) cls += ' ' + balColorClass(bal);
+
+    const balHtml = (bal !== null && c.current)
+      ? `<div class="cell-bal ${balNumClass(bal)}">${fmtShort(bal)}</div>`
+      : '';
+
+    let dots = '';
+    if (hasTxns && c.current) {
+      dots = '<div class="cell-dots">';
+      if (hasIncome) dots += '<span class="dot dot-income"></span>';
+      if (hasBig)    dots += '<span class="dot dot-bigbill"></span>';
+      if (hasBill)   dots += '<span class="dot dot-bill"></span>';
+      dots += '</div>';
+    }
+
+    html += `<div class="${cls}">
+      <div class="cell-top">
+        <div class="cell-day">${c.dom}</div>
+      </div>
+      <div>
+        ${balHtml}
+        ${dots}
+      </div>
+    </div>`;
+  }
+  document.getElementById('cal-grid').innerHTML = html;
+}
+
+function prevMonth() {
+  if (calMonth === 0) { calMonth = 11; calYear--; } else calMonth--;
+  renderCalendar();
+}
+function nextMonth() {
+  if (calMonth === 11) { calMonth = 0; calYear++; } else calMonth++;
+  renderCalendar();
+}
+function goToday() {
+  calYear  = today.getFullYear();
+  calMonth = today.getMonth();
+  renderCalendar();
+}
+
+// ═══════════════════════════════════════════════════════
+// FINANCIAL RENDER (header + next 3 days)
+// ═══════════════════════════════════════════════════════
+
 function renderFinancial() {
-  const seed = parseFloat(localStorage.getItem('bruss:seed') || '3000');
+  _forecastCache = null; // bust cache on refresh
+  const seed = getSeed();
   const fc   = buildForecast(seed);
 
-  const today = new Date(); today.setHours(0,0,0,0);
-  const todayDk   = dateKey(today);
-  const todayData = fc[todayDk];
+  const todayData = fc[todayKey];
   const bal = todayData ? todayData.balance : null;
 
   const numEl = document.getElementById('balance-num');
-  numEl.className = 'balance-num ' + (bal !== null ? balClass(bal) : 'bal-dim');
+  numEl.className = 'balance-num ' + (bal !== null ? (bal >= 1000 ? 'bal-green' : bal >= 500 ? 'bal-yellow' : 'bal-red') : 'bal-dim');
   numEl.textContent = bal !== null ? fmt(bal) : '—';
 
-  document.getElementById('status-badge').innerHTML =
-    bal !== null ? badgeHtml(bal) : '';
+  const badgeEl = document.getElementById('status-badge');
+  if (bal !== null) {
+    if (bal >= 1000) badgeEl.innerHTML = '<span class="status-badge bdg-green">&#10003; On Track</span>';
+    else if (bal >= 500) badgeEl.innerHTML = '<span class="status-badge bdg-yellow">&#9650; Low Buffer</span>';
+    else badgeEl.innerHTML = '<span class="status-badge bdg-red">&#9888; Danger</span>';
+  } else {
+    badgeEl.innerHTML = '';
+  }
 
   const si = document.getElementById('seed-input');
   if (!si.value) si.placeholder = 'Seed: ' + fmt(seed) + ' — update?';
 
   // Next 3 days
-  const upEl = document.getElementById('upcoming-days');
   let html = '';
   for (let i = 1; i <= 3; i++) {
     const d = new Date(today);
@@ -581,13 +882,9 @@ function renderFinancial() {
     const dk   = dateKey(d);
     const data = fc[dk];
     if (!data) continue;
-
     const dayLabel = d.toLocaleDateString('en-US', {weekday:'long', month:'short', day:'numeric'});
-    const color    = balColor(data.balance);
-
     let txnRows = '';
-    const show = data.txns.slice(0, 6);
-    for (const t of show) {
+    for (const t of data.txns.slice(0, 6)) {
       const cls = t.amount >= 0 ? 'pos' : (t.type === 'allowance' ? 'allow' : 'neg');
       txnRows += `<div class="txn-row">
         <span>${t.name}</span>
@@ -595,19 +892,20 @@ function renderFinancial() {
       </div>`;
     }
     if (data.txns.length > 6)
-      txnRows += `<div class="txn-row ghost"><span>+ ${data.txns.length-6} more…</span></div>`;
+      txnRows += `<div class="txn-row ghost"><span>+ ${data.txns.length-6} more&hellip;</span></div>`;
     if (!data.txns.length)
       txnRows = '<div class="txn-row ghost"><span>No scheduled transactions</span></div>';
-
     html += `<div class="day-block">
       <div class="day-header">
         <span class="day-name">${dayLabel}</span>
-        <span class="day-bal" style="color:${color}">${fmtShort(data.balance)}</span>
+        <span class="day-bal" style="color:${balColor(data.balance)}">${fmtShort(data.balance)}</span>
       </div>
       ${txnRows}
     </div>`;
   }
-  upEl.innerHTML = html || '<div class="ghost">No data</div>';
+  document.getElementById('upcoming-days').innerHTML = html || '<div class="ghost">No data</div>';
+
+  renderCalendar();
 }
 
 function setSeed() {
@@ -620,24 +918,57 @@ function setSeed() {
 }
 
 // ═══════════════════════════════════════════════════════
-// BILLS LIST
+// BILLS RENDER
 // ═══════════════════════════════════════════════════════
 
 function renderBills() {
-  const m = new Date().getMonth();
-  const el = document.getElementById('bills-list');
+  const now   = new Date();
+  const m     = now.getMonth();
+  const dom   = now.getDate();
+
+  document.getElementById('bills-month-label').textContent =
+    now.toLocaleDateString('en-US', {month:'long', year:'numeric'});
+
+  // Monthly bills — 2-column grid
   let html = '<div class="bills-grid">';
   for (const b of MONTHLY_BILLS) {
     let amt = b.amount;
     if (b.seasonal === 'nwnatural')    amt = NW_NATURAL_BY_MONTH[m];
     if (b.seasonal === 'pacificpower') amt = PACIFIC_POWER_BY_MONTH[m];
-    html += `<div class="bill-item">
-      <span class="bill-name">${b.name}</span>
+
+    const daysUntil = b.day - dom;
+    let badgeCls = 'bill-day-badge';
+    if (daysUntil === 0) badgeCls += ' due-today';
+    else if (daysUntil > 0 && daysUntil <= 5) badgeCls += ' due-soon';
+
+    html += `<div class="bill-row">
+      <span class="${badgeCls}">${ordinal(b.day)}</span>
+      <a class="bill-link" href="${b.url}" target="_blank" rel="noopener">${b.name}</a>
       <span class="bill-amt">${fmt(amt)}</span>
     </div>`;
   }
   html += '</div>';
-  el.innerHTML = html;
+
+  // Periodic bills applicable this month
+  const periodic = PERIODIC_BILLS.filter(b => b.months.includes(m));
+  if (periodic.length) {
+    html += '<div class="bills-periodic-title">Periodic &mdash; This Month</div>';
+    html += '<div class="bills-periodic-grid">';
+    for (const b of periodic) {
+      const daysUntil = b.day - dom;
+      let badgeCls = 'bill-day-badge';
+      if (daysUntil === 0) badgeCls += ' due-today';
+      else if (daysUntil > 0 && daysUntil <= 5) badgeCls += ' due-soon';
+      html += `<div class="bill-row">
+        <span class="${badgeCls}">${ordinal(b.day)}</span>
+        <span class="bill-link" style="color:var(--muted);cursor:default">${b.name}</span>
+        <span class="bill-amt">${fmt(b.amount)}</span>
+      </div>`;
+    }
+    html += '</div>';
+  }
+
+  document.getElementById('bills-list').innerHTML = html;
 }
 
 // ═══════════════════════════════════════════════════════
@@ -654,7 +985,6 @@ const WX_ICON = {
   85:'🌨️', 86:'❄️',
   95:'⛈️', 96:'⛈️', 99:'⛈️',
 };
-
 const WX_DESC = {
   0:'Clear', 1:'Mostly Clear', 2:'Partly Cloudy', 3:'Overcast',
   45:'Fog', 48:'Icy Fog',
@@ -665,7 +995,6 @@ const WX_DESC = {
   85:'Snow Showers', 86:'Heavy Snow Showers',
   95:'Thunderstorm', 96:'Thunderstorm + Hail', 99:'Severe Thunderstorm',
 };
-
 const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
 async function fetchWeather() {
@@ -677,10 +1006,9 @@ async function fetchWeather() {
     '&temperature_unit=fahrenheit&wind_speed_unit=mph' +
     '&timezone=America%2FLos_Angeles&forecast_days=4';
   try {
-    const res  = await fetch(url);
-    const data = await res.json();
-    renderWeather(data);
-  } catch (e) {
+    const r = await fetch(url);
+    renderWeather(await r.json());
+  } catch {
     document.getElementById('weather-now').innerHTML =
       '<div class="err">Weather unavailable — check connection</div>';
     document.getElementById('fc-strip').innerHTML = '';
@@ -690,42 +1018,34 @@ async function fetchWeather() {
 function renderWeather(data) {
   const cur  = data.current;
   const code = cur.weather_code;
-  const icon = WX_ICON[code] || '🌡️';
-  const desc = WX_DESC[code] || 'Unknown';
-  const temp = Math.round(cur.temperature_2m);
-  const wind = Math.round(cur.wind_speed_10m);
-  const hum  = cur.relative_humidity_2m;
-
   document.getElementById('weather-now').innerHTML = `
     <div class="weather-now">
-      <div class="wx-icon">${icon}</div>
+      <div class="wx-icon">${WX_ICON[code] || '🌡️'}</div>
       <div>
-        <div class="wx-temp">${temp}°<span style="font-size:1.4rem;color:var(--faint)">F</span></div>
-        <div class="wx-desc">${desc}</div>
-        <div class="wx-detail">Wind ${wind} mph &nbsp;·&nbsp; Humidity ${hum}%</div>
+        <div class="wx-temp">${Math.round(cur.temperature_2m)}&deg;<span style="font-size:1.2rem;color:var(--faint)">F</span></div>
+        <div class="wx-desc">${WX_DESC[code] || 'Unknown'}</div>
+        <div class="wx-detail">Wind ${Math.round(cur.wind_speed_10m)} mph &nbsp;&middot;&nbsp; Humidity ${cur.relative_humidity_2m}%</div>
       </div>
     </div>`;
 
   const daily = data.daily;
   let strip = '<div class="fc-strip">';
   for (let i = 0; i < 4; i++) {
-    const d       = new Date(daily.time[i] + 'T12:00:00');
-    const label   = i === 0 ? 'Today' : DOW[d.getDay()];
-    const fc_icon = WX_ICON[daily.weather_code[i]] || '🌡️';
-    const hi      = Math.round(daily.temperature_2m_max[i]);
-    const lo      = Math.round(daily.temperature_2m_min[i]);
-    const precip  = daily.precipitation_probability_max[i];
+    const d      = new Date(daily.time[i] + 'T12:00:00');
+    const label  = i === 0 ? 'Today' : DOW[d.getDay()];
+    const hi     = Math.round(daily.temperature_2m_max[i]);
+    const lo     = Math.round(daily.temperature_2m_min[i]);
+    const precip = daily.precipitation_probability_max[i];
     strip += `<div class="fc-day">
       <div class="fc-dayname">${label}</div>
-      <div class="fc-icon">${fc_icon}</div>
-      <div class="fc-hi">${hi}°</div>
-      <div class="fc-lo">${lo}°</div>
+      <div class="fc-icon">${WX_ICON[daily.weather_code[i]] || '🌡️'}</div>
+      <div class="fc-hi">${hi}&deg;</div>
+      <div class="fc-lo">${lo}&deg;</div>
       ${precip > 10 ? `<div class="fc-precip">💧 ${precip}%</div>` : ''}
     </div>`;
   }
   strip += '</div>';
   document.getElementById('fc-strip').innerHTML = strip;
-
   document.getElementById('last-wx-refresh').textContent =
     'WEATHER UPDATED ' + new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
 }
